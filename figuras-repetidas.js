@@ -55,13 +55,18 @@ randomFruitLess = function(fruitInt) {
     return random;
 }
 
-resizeAll = function(width) {
-    for (var i=0;i<fruits.children.length;i++)
-        fruits.children[i].width = width
 
-    bottom = fruits.children[fruits.children.length-1].getBoundingClientRect().bottom
-    if ( bottom + width < screen.height - width )
-      resizeAll(width + 5)
+resizeAll = function(height) {
+  aspectRatio = screen.height / screen.width
+    for (var i=0;i<fruits.children.length;i++)
+        fruits.children[i].width = height * aspectRatio
+
+    setTimeout(function(){ 
+      bottom = fruits.children[fruits.children.length-1].getBoundingClientRect().bottom
+      if ( bottom + height < screen.height) {
+        resizeAll(height + 5)
+      }
+    }, 5);
 }
 
 addFruit = function(fruitPosition) {
@@ -79,7 +84,7 @@ draw = function(){
           addFruit(uniqueFruit)
         }
     }
-    resizeAll(50)
+    resizeAll(5)
 }
 draw()
 
