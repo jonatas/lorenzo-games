@@ -1,16 +1,35 @@
-var fruitNames = "apple banana berry cucumber eggplant grape green-grape lemon mango olive onion orange peach pinneapple plum radish strawberry tomato watermelon".split(" ")
+allFruits = "apple banana berry cucumber eggplant grape green-grape lemon mango olive onion orange peach pinneapple plum radish strawberry tomato watermelon".split(" ")
+
+fruitNames = allFruits //; allFruits.slice(0,4)
 
 fruits = document.getElementById('fruits')
-current = 1
 
-function isUnique(event){
+playWithNFruits = 12
+howManyDifferentFruits = 4
+
+pickFruitsToPlay = function(fruits) {
+    howManyDifferentFruits += 1
+    fruitNames = []
+    for (var i=0;i<howManyDifferentFruits;i++) {
+        fruitName = null
+        while (fruitName == null || fruitNames.includes(fruitName)){
+            fruitName = allFruits[parseInt(Math.random()*allFruits.length)]
+        }
+        fruitNames.push( fruitName)
+    }
+}
+
+pickFruitsToPlay()
+
+isUnique = function(event){
     src = event.target.src
     count = 0
     for(var i=0;i<fruits.children.length;i++){
         if (src == fruits.children[i].src) count++;
     }
     if ( count == 1 ) {
-        current = current * 2
+        playWithNFruits += 4
+        pickFruitsToPlay()
         draw()
     }
 
@@ -20,7 +39,7 @@ fruit = function(name) {
     img = document.createElement("img")
     img.src = "fruits/"+name+".png"
     img.onclick = isUnique
-    img.width = (Math.sqrt(screen.height * screen.width) / current)
+    img.width = (Math.sqrt(screen.height * screen.width) / playWithNFruits)
     return img
 }
 
@@ -30,8 +49,9 @@ randomFruitPosition = function() {
 
 randomFruitLess = function(fruitInt) {
     random = null
-    while (random == null || fruitInt == random)
+    while (random == null || fruitInt == random) {
         random = randomFruitPosition();
+    }
     return random;
 }
 
@@ -51,15 +71,15 @@ addFruit = function(fruitPosition) {
 draw = function(){
     fruits.innerHTML = ""
     uniqueFruit = randomFruitPosition()
-    randomMoment = parseInt(Math.random()*current)
-    for (var i = 0; i < current; i++) {
+    randomMoment = parseInt(Math.random()*playWithNFruits)
+    for (var i = 0; i < playWithNFruits-1; i++) {
         addFruit(randomFruitLess(uniqueFruit))
         if (i == randomMoment) {
           console.log(fruitNames[uniqueFruit])
           addFruit(uniqueFruit)
         }
     }
-    resizeAll(10)
+    resizeAll(50)
 }
 draw()
 
