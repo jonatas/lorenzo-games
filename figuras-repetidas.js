@@ -3,11 +3,13 @@ allFruits = "apple banana berry cucumber eggplant grape green-grape lemon mango 
 fruitNames = allFruits //; allFruits.slice(0,4)
 
 fruits = document.getElementById('fruits')
+fruitsCounter = document.getElementById('fruits_counter')
 
+clicksCounter = 0
 playWithNFruits = 12
 howManyDifferentFruits = 4
 
-pickFruitsToPlay = function(fruits) {
+pickFruitsToPlay = (fruits) => {
     howManyDifferentFruits += 1
     fruitNames = []
     for (var i=0;i<howManyDifferentFruits;i++) {
@@ -17,12 +19,14 @@ pickFruitsToPlay = function(fruits) {
         }
         fruitNames.push( fruitName)
     }
+
+   draw()
 }
 
-pickFruitsToPlay()
 
-isUnique = function(event){
+checkClick = (event) => {
     src = event.target.src
+    clicksCounter += 1
     count = 0
     for(var i=0;i<fruits.children.length;i++){
         if (src == fruits.children[i].src) count++;
@@ -30,24 +34,31 @@ isUnique = function(event){
     if ( count == 1 ) {
         playWithNFruits += 4
         pickFruitsToPlay()
-        draw()
+    } else {
+      for(var i=0;i<fruits.children.length;i++){
+        element = fruits.children[i]
+        if (src == element.src)
+          element.parentNode.removeChild(element)
+      }
+
+      resizeAll(5)
     }
 
 }
 
-fruit = function(name) {
+fruit = (name) => {
     img = document.createElement("img")
     img.src = "fruits/"+name+".png"
-    img.onclick = isUnique
+    img.onclick = checkClick
     img.width = (Math.sqrt(screen.height * screen.width) / playWithNFruits)
     return img
 }
 
-randomFruitPosition = function() {
+randomFruitPosition = () => {
   return parseInt(Math.random()*fruitNames.length)
 }
 
-randomFruitLess = function(fruitInt) {
+randomFruitLess = (fruitInt) => {
     random = null
     while (random == null || fruitInt == random) {
         random = randomFruitPosition();
@@ -56,27 +67,31 @@ randomFruitLess = function(fruitInt) {
 }
 
 
-resizeAll = function(height) {
+resizeAll = (height) => {
   aspectRatio = screen.height / screen.width
     for (var i=0;i<fruits.children.length;i++)
         fruits.children[i].width = height * aspectRatio
 
-    setTimeout(function(){ 
-      bottom = fruits.children[fruits.children.length-1].getBoundingClientRect().bottom
-      if ( bottom + height < screen.height) {
-        resizeAll(height + 5)
-      }
-    }, 5);
+  fruitsCounter.innerHTML = `fruits: ${fruits.children.length} cilcks: ${clicksCounter}`
+
+  resize = () => {
+    bottom = fruits.children[fruits.children.length-1].getBoundingClientRect().bottom
+    if ( bottom + height < screen.height) {
+      resizeAll(height + 5)
+    }
+  }
+
+  setTimeout(resize, 1);
 }
 
-addFruit = function(fruitPosition) {
+addFruit = (fruitPosition) => {
     fruits.appendChild(fruit(fruitNames[fruitPosition]))
 }
 
-draw = function(){
+draw = () => {
     fruits.innerHTML = ""
     uniqueFruit = randomFruitPosition()
-    randomMoment = parseInt(Math.random()*playWithNFruits)
+    randomMoment = parseInt(Math.random()*playWithNFruits-1)
     for (var i = 0; i < playWithNFruits-1; i++) {
         addFruit(randomFruitLess(uniqueFruit))
         if (i == randomMoment) {
@@ -85,6 +100,8 @@ draw = function(){
         }
     }
     resizeAll(5)
+
 }
-draw()
+
+pickFruitsToPlay()
 
