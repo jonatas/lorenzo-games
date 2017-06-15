@@ -23,25 +23,25 @@ pickFruitsToPlay = (fruits) => {
    draw()
 }
 
-
 checkClick = (event) => {
     src = event.target.src
     clicksCounter += 1
     count = 0
     for(var i=0;i<fruits.children.length;i++){
-        if (src == fruits.children[i].src) count++;
+        element = fruits.children[i]
+        element.style = null
+        if (src == element.src) count++;
     }
     if ( count == 1 ) {
-        playWithNFruits += 4
+        playWithNFruits = fruits.children.length + 4
         pickFruitsToPlay()
     } else {
-      for(var i=0;i<fruits.children.length;i++){
+      for(var i=0; i<fruits.children.length;i++){
         element = fruits.children[i]
-        if (src == element.src)
-          element.parentNode.removeChild(element)
+        if (src == element.src) {
+          element.style = "border: 3px dotted gray" //width *= 0.9
+        }
       }
-
-      resizeAll(5)
     }
 
 }
