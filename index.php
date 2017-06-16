@@ -1,1 +1,1 @@
-<?php include_once("figuras-repetidas.html");
+<?php include_once("index.html");

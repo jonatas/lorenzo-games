@@ -50,7 +50,7 @@ fruit = (name) => {
     img = document.createElement("img")
     img.src = "fruits/"+name+".png"
     img.onclick = checkClick
-    img.width = (Math.sqrt(screen.height * screen.width) / playWithNFruits)
+    img.width =  screen.width / playWithNFruits / Math.sqrt(playWithNFruits)
     return img
 }
 
@@ -72,7 +72,7 @@ resizeAll = (height) => {
     for (var i=0;i<fruits.children.length;i++)
         fruits.children[i].width = height * aspectRatio
 
-  fruitsCounter.innerHTML = `fruits: ${fruits.children.length} cilcks: ${clicksCounter}`
+  fruitsCounter.innerHTML = `fruits: ${fruits.children.length} clicks: ${clicksCounter}`
 
   resize = () => {
     bottom = fruits.children[fruits.children.length-1].getBoundingClientRect().bottom
